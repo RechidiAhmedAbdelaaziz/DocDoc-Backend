@@ -4,5 +4,5 @@ const rechidi = {
         id: { type: 'string' },
         name: { type: 'string' },
     },
-    required: ['id', 'name'],
+    required: ['id', 'name' , "rechidi" ],
 };
