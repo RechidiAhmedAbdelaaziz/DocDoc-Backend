@@ -12,6 +12,8 @@ import { RefreshToken } from 'src/core/models/refreshtoken.schema';
 import { Otp } from 'src/core/models/otp.schema';
 import { isEmail, isPhoneNumber } from 'class-validator';
 import { getRandomValues } from 'crypto';
+import { Doctor } from 'src/core/models/doctor.schema';
+import { DoctorRegisterDTO } from './dto/doctorregister.dto';
 
 
 @Injectable()
@@ -20,6 +22,7 @@ export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
     @InjectModel(User.name) private userModel: Model<User>,
+    @InjectModel(Doctor.name) private doctorModel: Model<Doctor>,
     @InjectModel(RefreshToken.name) private refreshTokenModel: Model<RefreshToken>,
     @InjectModel(Otp.name) private otpModel: Model<Otp>,
   ) { }
@@ -46,6 +49,32 @@ export class AuthService {
 
 
     return { ...tokens, user: userDetails };
+  }
+
+
+  registerDoctor = async (data: DoctorRegisterDTO) => {
+    const { email, name, password, phone, description, role } = data;
+
+    const checkUser = await this.userModel.findOne({ $or: [{ email }, { phone }] });
+    if (checkUser) throw new HttpException('Email or phone already used', 400);
+
+    const hashedPassword = await hash(password, 10);
+
+    const doctor = await this.doctorModel.create({
+      email,
+      name,
+      phone,
+      password: hashedPassword,
+      description,
+      role,
+
+    });
+
+    const tokens = await this.generateToken(doctor._id);
+    const { password: pass, ...doctorDetails } = doctor.toObject();
+
+    return { ...tokens, user: doctorDetails };
+
   }
 
   login = async (data: LoginDTO) => {
