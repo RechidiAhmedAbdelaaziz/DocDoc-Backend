@@ -13,6 +13,8 @@ services:
       - JWT_SECRET=secret
       - MONGO_URI=mongodb://mongo:27017
     command: npm run start:dev
+    depends_on:
+      - mongo
 
   mongo:
     image: mongo:latest
