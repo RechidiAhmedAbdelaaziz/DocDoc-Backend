@@ -3,6 +3,7 @@ import {  Module } from '@nestjs/common';
 import { AuthModule } from './module/auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { JwtModule } from '@nestjs/jwt';
+import { NotificationModule } from './module/notification/notification.module';
 import { AppointmentModule } from './module/appointment/appointment.module';
 
 
@@ -34,6 +35,7 @@ const databaseModule = MongooseModule.forRoot(process.env.MONGO_URI, {
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '10h' }
     }),
+    NotificationModule,
     AppointmentModule,
   ],
   controllers: [],

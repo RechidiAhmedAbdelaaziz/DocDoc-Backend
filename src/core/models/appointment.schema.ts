@@ -11,7 +11,7 @@ export class Appointment extends AbstractSchema {
     @Prop({ type: Types.ObjectId, ref: Doctor.name })
     doctor: Types.ObjectId
 
-    @Prop()
+    @Prop({ default: "Upcoming" })
     status: "Upcoming" | "Completed" | "Canceled"
 
     @Prop()
