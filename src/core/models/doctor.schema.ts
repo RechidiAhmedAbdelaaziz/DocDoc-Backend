@@ -8,25 +8,31 @@ export class Doctor extends User {
     @Prop()
     description: string;
 
-    @Prop()
+    @Prop({ default: true })
     isAvailable: boolean;
 
-    @Prop()
-    role: "Doctor" | "Dentist" | "Hairdresser" | "Personal Trainer"
 
-    @Prop()
+
+    @Prop({
+        type: {
+            avg: { type: Number, default: 0 },
+            total: { type: Number, default: 0 },
+            count: { type: Number, default: 0 }
+        }
+    })
     rating: {
-        avrege: number
+        avg: number
         total: number
         count: number
     }
 
-    @Prop()
+    @Prop({ type: { city: String, state: String, country: String } })
     location: {
         city: string
         state: string
         country: string
     }
 
-
+    @Prop({ enum: ["Doctor", "Dentist", "Hairdresser", "Personal Trainer", "User"], default: "User" })
+    role: "Doctor" | "Dentist" | "Hairdresser" | "Personal Trainer" | "User";
 }

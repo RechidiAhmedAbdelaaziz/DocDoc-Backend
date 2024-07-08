@@ -6,6 +6,7 @@ import { AuthGuard, CurrentUser, JwtPayload, ParsrMonogoIdPipe as ParseMongoIdPi
 import { RefreshTokenDTO } from './dto/refreshtoken.dto';
 import { ForgotPasswordDTO } from './dto/forgotpassword.dto';
 import { ResetPasswordDTO } from './dto/resetpassword.dto';
+import { DoctorRegisterDTO } from './dto/doctorregister.dto';
 
 
 @Controller('auth')
@@ -17,11 +18,18 @@ export class AuthController {
     return this.authService.register(body);
   }
 
+  @Post('doctor-register')  //* AUTH | Doctor Register   ~ {{host}}api/v1/auth/doctor-register
+  doctorRegister(@Body() body: DoctorRegisterDTO) {
+    return this.authService.registerDoctor(body);
+  }
+
   @Post('login')  //* AUTH | Login   ~ {{host}}api/v1/auth/login
   async login(@Body() body: LoginDTO) {
     const result = await this.authService.login(body);
     return new ResponseHandler(result, 'Logged in successfully');
   }
+
+
 
   @UseGuards(AuthGuard)
   @Patch('refresh-token')  //* AUTH | Refresh Token   ~ {{host}}api/v1/auth/refresh-token
