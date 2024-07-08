@@ -15,6 +15,8 @@ export class AppointmentRequest extends AbstractSchema {
     doctor: Types.ObjectId
 
     @Prop()
-    status: "Pending" | "Approved" | "Refused"
+    date: Date
+
+
 
 }
