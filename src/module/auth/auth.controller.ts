@@ -1,11 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
+import { Controller, Post, Body, Patch, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDTO } from './dto/register.dto';
 import { LoginDTO } from './dto/login.dto';
-import { AuthGuard, CurrentUser, JwtPayload, ResponseHandler } from '@app/common';
+import { AuthGuard, CurrentUser, JwtPayload, ParsrMonogoIdPipe as ParseMongoIdPipe, ResponseHandler } from '@app/common';
 import { RefreshTokenDTO } from './dto/refreshtoken.dto';
-import { Request } from 'express';
 import { ForgotPasswordDTO } from './dto/forgotpassword.dto';
+import { ResetPasswordDTO } from './dto/resetpassword.dto';
 
 
 @Controller('auth')
@@ -34,12 +34,24 @@ export class AuthController {
     return new ResponseHandler(result, 'Token refreshed successfully');
   }
 
-  @UseGuards(AuthGuard)
+
   @Post('forgot-password')  //* AUTH | Forgot Password   ~ {{host}}api/v1/auth/forgot-password
-  async forgotPassword(@Body() body: ForgotPasswordDTO) {
-    const result = await this.authService.forgotPassword({ login: body.login });
+  async forgotPassword(@Body() data: ForgotPasswordDTO) {
+    const result = await this.authService.forgotPassword({ login: data.login });
     return new ResponseHandler(result, 'Password reset OTP sent successfully');
   }
+
+  @Patch('reset-password')  //* AUTH | Reset Password   ~ {{host}}api/v1/auth/reset-password
+  async resetPassword(
+    @Body() data: ResetPasswordDTO,
+
+  ) {
+    const result = await this.authService.resetPassword(data);
+    return new ResponseHandler(result, 'Password reset successfully');
+  }
+
+
+
 
 
 }

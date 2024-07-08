@@ -83,7 +83,7 @@ export class AuthService {
   forgotPassword = async (args: { login: string }) => {
     const { login } = args;
 
-    if (!isPhoneNumber(login, 'DZ') && !isEmail(login)) throw new HttpException('Invalid login', 400);
+    this.isLogin(login);
 
     const user = await this.userModel.findOne({ $or: [{ email: login }, { phone: login }] });
     if (!user) throw new HttpException('Email or phone not found', 400);
@@ -93,7 +93,35 @@ export class AuthService {
 
   }
 
+  resetPassword = async (data: { login: string, otp: number, password: string }) => {
+    const { login, otp, password } = data;
 
+    this.isLogin(login);
+
+    const user = await this.userModel.findOne({ $or: [{ email: login }, { phone: login }] });
+    if (!user) throw new HttpException('Email or phone not found', 400);
+
+    const otpData = await this.otpModel.findOne({ user: user._id });
+    if (!otpData) throw new HttpException('OTP not found', 400);
+
+    if (otpData.otp !== otp) throw new HttpException('Invalid OTP', 400);
+
+    const hashedPassword = await hash(password, 10);
+    user.password = hashedPassword;
+
+    Promise.all([
+      user.save(),
+      otpData.deleteOne()
+    ])
+
+  }
+
+
+
+  private isLogin(login: string) {
+    if (!(isPhoneNumber(login, 'DZ') || isEmail(login))) throw new HttpException('Invalid login', 400);
+
+  }
 
   private async generateOTP(user: Types.ObjectId,) {
     const otpCode = getRandomValues(new Uint8Array(2)).join('');
