@@ -1,13 +1,14 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { MongooseModule, SchemaFactory } from '@nestjs/mongoose';
 import { User } from 'src/core/models/user.schemas';
-import { JwtModule, JwtService } from '@nestjs/jwt';
+import { JwtService } from '@nestjs/jwt';
 import { RefreshToken } from 'src/core/models/refreshtoken.schema';
 import { Otp } from 'src/core/models/otp.schema';
 import { Doctor } from 'src/core/models/doctor.schema';
 
+@Global()
 @Module({
   imports: [
     MongooseModule.forFeature([
