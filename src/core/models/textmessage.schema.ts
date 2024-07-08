@@ -1,10 +1,10 @@
 
 
 import { Prop, Schema } from "@nestjs/mongoose";
-import { MessageEntity } from "./message.schema";
+import { Message } from "./message.schema";
 
 @Schema()
-export class TextMessageEntity extends MessageEntity {
+export class TextMessage extends Message {
 
     @Prop()
     content: string

@@ -1,14 +1,15 @@
 import { Prop, Schema } from "@nestjs/mongoose";
 import { Document, Types } from "mongoose";
-import { UserEntity } from "./user.schemas";
+import { User } from "./user.schemas";
+import { AbstractSchema } from "./abstract.schema";
 
 
 @Schema()
-export class PaymentEntity extends Document {
+export class Payment extends AbstractSchema {
 
 
 
-    @Prop({ type: Types.ObjectId, ref: UserEntity.name })
+    @Prop({ type: Types.ObjectId, ref: User.name })
     user: Types.ObjectId
 
     @Prop()
@@ -25,7 +26,7 @@ export class PaymentEntity extends Document {
 
     @Prop()
     amount: number
-    
+
     @Prop()
     status: "Pending" | "Approved" | "Refused"
 }

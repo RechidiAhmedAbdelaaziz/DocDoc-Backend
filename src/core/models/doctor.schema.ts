@@ -1,9 +1,9 @@
 import { Prop, Schema } from "@nestjs/mongoose";
-import { UserEntity } from "./user.schemas";
+import { User } from "./user.schemas";
 
 
 @Schema()
-export class DoctorEntity extends UserEntity {
+export class Doctor extends User {
 
     @Prop()
     description: string;
