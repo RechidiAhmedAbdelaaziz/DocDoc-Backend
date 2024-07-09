@@ -4,6 +4,7 @@ import { AuthGuard, CurrentUser, JwtPayload, ParserMonogoIdPipe, ResponseHandler
 import { SendAppointmentRequestDTO } from './dto/sendappointmentrequest.dto';
 import { Types } from 'mongoose';
 import { FetchAppointmentsDTO } from './dto/fetchappointments.dto';
+import { RescheduleAppointmentDTO } from './dto/rescheduleappointment.dto';
 
 @UseGuards(AuthGuard)
 @Controller('appointment')
@@ -76,4 +77,32 @@ export class AppointmentController {
     return new ResponseHandler(result, 'All Appointments Fetched Successfully')
   }
 
+  @Get(':id') //* APPOINTMENT | Get One   ~ {{host}}api/v1/appointment/:id
+  async getAppointment(
+    @Param('id', ParserMonogoIdPipe) id: Types.ObjectId,
+    @CurrentUser() user: JwtPayload,
+  ) {
+    const result = await this.appointmentService.fetchAppointment({
+      userId: user.id,
+      appointmentId: id,
+    })
+
+    return new ResponseHandler(result, 'Appointment Fetched Successfully')
+  }
+
+
+  @Patch(':id') //* APPOINTMENT | reschedule   ~ {{host}}api/v1/appointment/:id
+  async rescheduleAppointment(
+    @Param('id', ParserMonogoIdPipe) id: Types.ObjectId,
+    @CurrentUser() user: JwtPayload,
+    @Body() data: RescheduleAppointmentDTO,
+  ) {
+    const result = await this.appointmentService.rescheduleAppointment({
+      userId: user.id,
+      appointmentId: id,
+      ...data,
+    })
+
+    return new ResponseHandler(result, 'Appointment Rescheduled Successfully')
+  }
 }

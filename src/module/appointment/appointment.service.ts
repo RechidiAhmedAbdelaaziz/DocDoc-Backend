@@ -167,14 +167,61 @@ export class AppointmentService {
             prevPage: page > 1 ? page - 1 : null,
         }
 
-
-
-
         return {
             pagination,
             appointments,
         };
     }
+
+    fetchAppointment = async (args: {
+        userId: Types.ObjectId;
+        appointmentId: Types.ObjectId;
+    }) => {
+        const { userId, appointmentId } = args;
+
+        const user = await this.userModel.findById(userId);
+        if (!user) throw new HttpException('User not found', 404);
+
+
+
+        const query = this.appointmentModel.findById(appointmentId);
+        if (user['kind'] == 'Doctor') query.populate('patient');
+        else query.populate('doctor');
+
+        const appointment = await query.exec();
+        if (!appointment) throw new HttpException('Appointment not found', 404);
+
+
+        const isAuthorized = userId.equals(appointment.doctor._id) || userId.equals(appointment.patient._id);
+
+        if (!isAuthorized) throw new HttpException('You are not authorized to view this appointment', 403);
+
+        return appointment;
+    }
+
+
+    rescheduleAppointment = async (data: {
+        userId: Types.ObjectId;
+        appointmentId: Types.ObjectId;
+        date: Date;
+    }) => {
+        const { userId, appointmentId, date } = data;
+
+        const appointment = await this.appointmentModel.findById(appointmentId);
+        if (!appointment) throw new HttpException('Appointment not found', 404);
+
+        const isAuthorized = userId.equals(appointment.doctor) || userId.equals(appointment.patient);
+        if (!isAuthorized) throw new HttpException('You are not authorized to reschedule this appointment', 403);
+
+
+        const isPast = new Date().valueOf() > Date.parse(date.toString());
+        if (isPast) throw new HttpException('You cannot reschedule an appointment that has already passed', 400);
+
+        appointment.date = date;
+
+        return await appointment.save();
+    }
+
 
 
 }
