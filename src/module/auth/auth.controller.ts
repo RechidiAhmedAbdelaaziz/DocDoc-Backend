@@ -2,7 +2,7 @@ import { Controller, Post, Body, Patch, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDTO } from './dto/register.dto';
 import { LoginDTO } from './dto/login.dto';
-import { AuthGuard, CurrentUser, JwtPayload, ParsrMonogoIdPipe as ParseMongoIdPipe, ResponseHandler } from '@app/common';
+import { AuthGuard, CurrentUser, JwtPayload, ParserMonogoIdPipe as ParseMongoIdPipe, ResponseHandler } from '@app/common';
 import { RefreshTokenDTO } from './dto/refreshtoken.dto';
 import { ForgotPasswordDTO } from './dto/forgotpassword.dto';
 import { ResetPasswordDTO } from './dto/resetpassword.dto';

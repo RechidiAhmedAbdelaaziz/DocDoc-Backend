@@ -1,8 +1,9 @@
 import { Prop, Schema } from "@nestjs/mongoose";
 import { AbstractSchema } from "./abstract.schema";
+import { Doctor } from "./doctor.schema";
 
 @Schema({
-
+    discriminatorKey: 'kind',
 })
 export class User extends AbstractSchema {
 
@@ -26,6 +27,8 @@ export class User extends AbstractSchema {
 
     @Prop()
     gender: "Male" | "Female";
+
+    
 
 
 

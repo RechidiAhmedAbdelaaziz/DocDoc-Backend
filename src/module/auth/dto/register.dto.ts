@@ -1,8 +1,9 @@
-import { IsAlpha, IsEmail, IsPhoneNumber, IsStrongPassword } from "class-validator";
+import { IsName } from "@app/common";
+import { IsAlpha, IsEmail, IsPhoneNumber, IsString, IsStrongPassword } from "class-validator";
 
 export class RegisterDTO {
 
-    @IsAlpha()
+    @IsName()
     name: string;
 
     @IsEmail()
