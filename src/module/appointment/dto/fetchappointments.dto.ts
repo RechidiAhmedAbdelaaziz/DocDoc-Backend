@@ -4,7 +4,8 @@ export class FetchAppointmentsDTO {
     @IsOptional()
     @IsString()
     status: string;
-
+    
+    @IsOptional()
     @IsDateString()
     date: Date;
 

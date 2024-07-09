@@ -130,7 +130,7 @@ export class AppointmentService {
             page?: number;
             limit?: number;
             status?: string;
-            date: Date;
+            date?: Date;
         }
     ) => {
         const page = args.page || 1;
@@ -149,7 +149,7 @@ export class AppointmentService {
 
         if (user['kind'] == 'Doctor') query['doctor'] = userId;
         else query['patient'] = userId;
-        query['date'] = { $gte: dayStart, $lte: dayEnd };
+        if (date) query['date'] = { $gte: dayStart, $lte: dayEnd };
         query['status'] = status || 'Upcoming';
 
         const total = await this.appointmentModel.countDocuments(query);
