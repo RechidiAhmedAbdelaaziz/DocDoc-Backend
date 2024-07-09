@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { JwtModule } from '@nestjs/jwt';
 import { NotificationModule } from './module/notification/notification.module';
 import { AppointmentModule } from './module/appointment/appointment.module';
+import { UserModule } from './module/user/user.module';
 
 
 const databaseModule = MongooseModule.forRoot(process.env.MONGO_URI, {
@@ -37,6 +38,7 @@ const databaseModule = MongooseModule.forRoot(process.env.MONGO_URI, {
     }),
     NotificationModule,
     AppointmentModule,
+    UserModule,
   ],
   controllers: [],
   providers: [],
