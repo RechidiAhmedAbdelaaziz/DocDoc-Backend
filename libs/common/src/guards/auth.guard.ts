@@ -1,7 +1,7 @@
 import { BadRequestException, CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Observable } from 'rxjs';
-import { JwtPayload, ParsrMonogoIdPipe } from '..';
+import { JwtPayload, ParserMonogoIdPipe } from '..';
 import { Types } from 'mongoose';
 import { Request } from 'express';
 
@@ -21,7 +21,7 @@ export class AuthGuard implements CanActivate {
         try {
 
             const decoded = this.jwtService.verify(token, { secret: process.env.JWT_SECRET });
-            const id = new ParsrMonogoIdPipe().transform(decoded.id, { type: 'param' });
+            const id = new ParserMonogoIdPipe().transform(decoded.id, { type: 'param' });
             request.user = { id };
             return true;
         } catch (error) {

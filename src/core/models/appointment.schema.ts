@@ -4,6 +4,7 @@ import { User } from "./user.schemas";
 import { Doctor } from "./doctor.schema";
 import { AbstractSchema } from "./abstract.schema";
 
+@Schema()
 export class Appointment extends AbstractSchema {
     @Prop({ type: Types.ObjectId, ref: User.name })
     patient: Types.ObjectId

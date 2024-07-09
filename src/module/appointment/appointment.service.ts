@@ -26,6 +26,7 @@ export class AppointmentService {
 
         const { date, message, doctorId, patientId } = data;
 
+
         const doctor = await this.doctorModel.findById(doctorId);
         if (!doctor) throw new HttpException('Doctor not found', 404);
         if (!doctor.isAvailable) throw new HttpException('Doctor is not available', 400);
@@ -61,8 +62,6 @@ export class AppointmentService {
         doctorId: Types.ObjectId;
     }) => {
         const { requestId, doctorId } = data;
-
-        Logger.debug(requestId, doctorId)
 
         const request = await this.appointmentRequestModel.findById(requestId);
         if (!request || !request.doctor.equals(doctorId)) throw new HttpException('Request not found', 404);
@@ -124,6 +123,58 @@ export class AppointmentService {
 
     }
 
+
+    fetchAppointments = async (
+        args: {
+            userId: Types.ObjectId;
+            page?: number;
+            limit?: number;
+            status?: string;
+            date: Date;
+        }
+    ) => {
+        const page = args.page || 1;
+        const limit = args.limit || 10;
+        const { userId, status, date } = args;
+
+        const dayStart = new Date(date);
+        dayStart.setHours(0, 0, 0, 0);
+        const dayEnd = new Date(date);
+        dayEnd.setHours(23, 59, 59, 999);
+
+        const user = await this.userModel.findById(userId);
+        if (!user) throw new HttpException('User not found', 404);
+
+        const query = {};
+
+        if (user['kind'] == 'Doctor') query['doctor'] = userId;
+        else query['patient'] = userId;
+        query['date'] = { $gte: dayStart, $lte: dayEnd };
+        query['status'] = status || 'Upcoming';
+
+        const total = await this.appointmentModel.countDocuments(query);
+
+        const appointments = await this.appointmentModel.find(query)
+            .skip((page - 1) * limit)
+            .limit(limit)
+            .sort({ date: -1 });
+
+
+        const pagination = {
+            page,
+            length: appointments.length,
+            nextPage: total > page * limit ? page + 1 : null,
+            prevPage: page > 1 ? page - 1 : null,
+        }
+
+
+
+
+        return {
+            pagination,
+            appointments,
+        };
+    }
 
 
 }
