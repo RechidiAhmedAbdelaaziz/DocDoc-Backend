@@ -29,7 +29,7 @@ export class User extends AbstractSchema {
     gender: "Male" | "Female";
 
     
-
+    // ["name email pic phone isActive gender "]
 
 
 }
