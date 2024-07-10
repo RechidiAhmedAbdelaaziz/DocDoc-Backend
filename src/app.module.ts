@@ -1,10 +1,12 @@
-import {  Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 
 import { AuthModule } from './module/auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { JwtModule } from '@nestjs/jwt';
 import { NotificationModule } from './module/notification/notification.module';
 import { AppointmentModule } from './module/appointment/appointment.module';
+import { UserModule } from './module/user/user.module';
+import { MulterModule } from '@nestjs/platform-express';
 
 
 const databaseModule = MongooseModule.forRoot(process.env.MONGO_URI, {
@@ -23,6 +25,10 @@ const databaseModule = MongooseModule.forRoot(process.env.MONGO_URI, {
   },
 });
 
+const multerModule = MulterModule.register({
+  dest: './upload',
+});
+
 
 
 
@@ -37,6 +43,8 @@ const databaseModule = MongooseModule.forRoot(process.env.MONGO_URI, {
     }),
     NotificationModule,
     AppointmentModule,
+    UserModule,
+    multerModule
   ],
   controllers: [],
   providers: [],

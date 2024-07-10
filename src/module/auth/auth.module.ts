@@ -24,6 +24,6 @@ const databaseModule = MongooseModule.forFeature([
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtService],
-  exports: [databaseModule]
+  exports: [databaseModule, JwtService]
 })
 export class AuthModule { }
