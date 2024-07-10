@@ -1,20 +1,22 @@
 services:
   docdoc:
-    build: ./
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: DocDoc
     ports:
       - "3000:3000"
     volumes:
       - ./src:/usr/src/app/src
       - ./libs:/usr/src/app/libs
-    environment:
-      - NODE_ENV=development
-      - PORT=3000
-      - JWT_SECRET=secret
-      - MONGO_URI=mongodb://mongo:27017
+    env_file:
+      - .env
     command: npm run start:dev
     depends_on:
       - mongo
+    dns:
+      - 8.8.8.8 # Google DNS
+      - 8.8.4.4 # Google DNS
 
   mongo:
     image: mongo:latest
