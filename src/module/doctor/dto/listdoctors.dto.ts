@@ -1,27 +1,28 @@
-import { IsNumber, IsOptional, IsString } from "class-validator";
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
 
 
 export class ListDoctorsDTO {
     @IsOptional()
     @IsString()
-    search : string;
+    search: string;
 
 
     @IsOptional()
     @IsString()
-    specialty : string;
+    specialty: string;
 
     @IsOptional()
     @IsString()
-    sort : string;
+    @IsNotEmpty()
+    sort: string;
 
     @IsOptional()
     @IsNumber()
-    page : number;
+    page: number;
 
     @IsOptional()
     @IsNumber()
-    limit : number;
+    limit: number;
 
 
 }
