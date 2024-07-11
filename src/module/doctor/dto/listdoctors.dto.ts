@@ -1,4 +1,4 @@
-import { IsOptional, IsString } from "class-validator";
+import { IsNumber, IsOptional, IsString } from "class-validator";
 
 
 export class ListDoctorsDTO {
@@ -14,6 +14,14 @@ export class ListDoctorsDTO {
     @IsOptional()
     @IsString()
     sort : string;
+
+    @IsOptional()
+    @IsNumber()
+    page : number;
+
+    @IsOptional()
+    @IsNumber()
+    limit : number;
 
 
 }
