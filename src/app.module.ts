@@ -8,6 +8,8 @@ import { AppointmentModule } from './module/appointment/appointment.module';
 import { UserModule } from './module/user/user.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { DoctorModule } from './module/doctor/doctor.module';
+import { ChatModule } from './module/chat/chat.module';
+import { ChatModule } from './module/chat/chat.module';
 
 
 const databaseModule = MongooseModule.forRoot(process.env.MONGO_URI, {
@@ -46,7 +48,8 @@ const multerModule = MulterModule.register({
     AppointmentModule,
     UserModule,
     multerModule,
-    DoctorModule
+    DoctorModule,
+    ChatModule
   ],
   controllers: [],
   providers: [],
