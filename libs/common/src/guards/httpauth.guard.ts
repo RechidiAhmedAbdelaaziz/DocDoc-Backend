@@ -1,12 +1,11 @@
 import { BadRequestException, CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Observable } from 'rxjs';
-import { JwtPayload, ParserMonogoIdPipe } from '..';
-import { Types } from 'mongoose';
+import { ParseMonogoIdPipe } from '..';
 import { Request } from 'express';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class HttpAuthGuard implements CanActivate {
     constructor(private jwtService: JwtService) {
 
     }
@@ -21,7 +20,7 @@ export class AuthGuard implements CanActivate {
         try {
 
             const decoded = this.jwtService.verify(token, { secret: process.env.JWT_SECRET });
-            const id = new ParserMonogoIdPipe().transform(decoded.id, { type: 'param' });
+            const id = new ParseMonogoIdPipe().transform(decoded.id, { type: 'param' });
             request.user = { id };
             return true;
         } catch (error) {
@@ -30,4 +29,6 @@ export class AuthGuard implements CanActivate {
         }
 
     }
+
+
 }

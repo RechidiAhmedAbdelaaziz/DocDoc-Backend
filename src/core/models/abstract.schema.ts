@@ -1,7 +1,7 @@
-import { Prop, Schema } from "@nestjs/mongoose";
+import { Prop, Schema as ISchema } from "@nestjs/mongoose";
 import { Document, Types } from "mongoose";
 
-@Schema()
+@ISchema()
 export abstract class AbstractSchema extends Document<Types.ObjectId> {
 
 
