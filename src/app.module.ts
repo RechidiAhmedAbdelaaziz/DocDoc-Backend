@@ -9,7 +9,6 @@ import { UserModule } from './module/user/user.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { DoctorModule } from './module/doctor/doctor.module';
 import { ChatModule } from './module/chat/chat.module';
-import { ChatModule } from './module/chat/chat.module';
 
 
 const databaseModule = MongooseModule.forRoot(process.env.MONGO_URI, {
@@ -31,9 +30,6 @@ const databaseModule = MongooseModule.forRoot(process.env.MONGO_URI, {
 const multerModule = MulterModule.register({
   dest: './upload',
 });
-
-
-
 
 
 @Module({

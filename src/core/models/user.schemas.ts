@@ -22,13 +22,13 @@ export class User extends AbstractSchema {
     @Prop({ select: false })
     password: string;
 
-    @Prop({ default: true })
-    isActive: boolean;
-
     @Prop()
     gender: "Male" | "Female";
 
-    
+    @Prop({ required: false, })
+    socketId: string;
+
+
     // ["name email pic phone isActive gender "]
 
 

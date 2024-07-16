@@ -3,7 +3,7 @@ import { PipeTransform, Injectable, ArgumentMetadata, BadRequestException } from
 import { Types } from 'mongoose';
 
 @Injectable()
-export class ParserMonogoIdPipe implements PipeTransform<string, Types.ObjectId> {
+export class ParseMonogoIdPipe implements PipeTransform<string, Types.ObjectId> {
     transform(value: any, metadata: ArgumentMetadata): Types.ObjectId {
         if (!Types.ObjectId.isValid(value)) {
             throw new BadRequestException('Invalid ID!');

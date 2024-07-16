@@ -1,12 +1,12 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { AppointmentService } from './appointment.service';
-import { AuthGuard, CurrentUser, JwtPayload, ParserMonogoIdPipe, ResponseHandler } from '@app/common';
+import { HttpAuthGuard, CurrentUser, JwtPayload, ParseMonogoIdPipe, ResponseHandler } from '@app/common';
 import { SendAppointmentRequestDTO } from './dto/sendappointmentrequest.dto';
 import { Types } from 'mongoose';
 import { FetchAppointmentsDTO } from './dto/fetchappointments.dto';
 import { RescheduleAppointmentDTO } from './dto/rescheduleappointment.dto';
 
-@UseGuards(AuthGuard)
+@UseGuards(HttpAuthGuard)
 @Controller('appointment')
 export class AppointmentController {
   constructor(private readonly appointmentService: AppointmentService) { }
@@ -16,7 +16,7 @@ export class AppointmentController {
   async sendRequest(
     @Body() data: SendAppointmentRequestDTO,
     @CurrentUser() user: JwtPayload,
-    @Param('id', ParserMonogoIdPipe) id: Types.ObjectId,
+    @Param('id', ParseMonogoIdPipe) id: Types.ObjectId,
   ) {
 
     const result = await this.appointmentService.sendRequest({
@@ -30,7 +30,7 @@ export class AppointmentController {
 
   @Patch('request/:id') //* REQUEST | Accept    ~ {{host}}api/v1/appointment/request/:id
   async acceptRequest(
-    @Param('id', ParserMonogoIdPipe) id: Types.ObjectId,
+    @Param('id', ParseMonogoIdPipe) id: Types.ObjectId,
     @CurrentUser() user: JwtPayload,
   ) {
 
@@ -46,7 +46,7 @@ export class AppointmentController {
 
   @Delete('request/:id') //* REQUEST | Cancel    ~ {{host}}api/v1/appointment/request/:id
   async cancelRequest(
-    @Param('id', ParserMonogoIdPipe) id: Types.ObjectId,
+    @Param('id', ParseMonogoIdPipe) id: Types.ObjectId,
     @CurrentUser() user: JwtPayload,
   ) {
 
@@ -79,7 +79,7 @@ export class AppointmentController {
 
   @Get(':id') //* APPOINTMENT | Get One   ~ {{host}}api/v1/appointment/:id
   async getAppointment(
-    @Param('id', ParserMonogoIdPipe) id: Types.ObjectId,
+    @Param('id', ParseMonogoIdPipe) id: Types.ObjectId,
     @CurrentUser() user: JwtPayload,
   ) {
     const result = await this.appointmentService.fetchAppointment({
@@ -93,7 +93,7 @@ export class AppointmentController {
 
   @Patch(':id') //* APPOINTMENT | reschedule   ~ {{host}}api/v1/appointment/:id
   async rescheduleAppointment(
-    @Param('id', ParserMonogoIdPipe) id: Types.ObjectId,
+    @Param('id', ParseMonogoIdPipe) id: Types.ObjectId,
     @CurrentUser() user: JwtPayload,
     @Body() data: RescheduleAppointmentDTO,
   ) {

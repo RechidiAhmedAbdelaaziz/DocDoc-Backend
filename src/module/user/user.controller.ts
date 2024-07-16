@@ -1,11 +1,11 @@
 import { Body, Controller, Get, Logger, Param, ParseArrayPipe, Patch, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { UserService } from './user.service';
-import { AuthGuard, CurrentUser, JwtPayload, ResponseHandler } from '@app/common';
+import { HttpAuthGuard, CurrentUser, JwtPayload, ResponseHandler } from '@app/common';
 import { Types } from 'mongoose';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UpdateProfileDTO } from './dto/updateprofile.dto';
 
-@UseGuards(AuthGuard)
+@UseGuards(HttpAuthGuard)
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) { }

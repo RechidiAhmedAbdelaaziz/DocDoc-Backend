@@ -7,6 +7,8 @@ import { Message } from 'src/core/models/message.schema';
 import { TextMessage } from 'src/core/models/textmessage.schema';
 import { VoiceMessage } from 'src/core/models/voicemessage.schema';
 import { AuthModule } from '../auth/auth.module';
+import { ChatController } from './chat.controller';
+import { CloudinaryModule } from '@app/common';
 
 const databaseModule = MongooseModule.forFeature([
   { name: Conversation.name, schema: SchemaFactory.createForClass(Conversation) },
@@ -20,7 +22,8 @@ const databaseModule = MongooseModule.forFeature([
 ]);
 
 @Module({
-  imports: [AuthModule, databaseModule],
+  imports: [AuthModule, databaseModule, CloudinaryModule],
   providers: [ChatGateway, ChatService],
+  controllers: [ChatController],
 })
 export class ChatModule { }

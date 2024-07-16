@@ -1,3 +1,4 @@
+import { IsNumber, IsOptional } from "class-validator";
 import { FilterQuery, Model } from "mongoose";
 
 export class Pagination<T> {
@@ -29,13 +30,23 @@ export class Pagination<T> {
         const currentPage = Math.min(page, Math.ceil(total / limit));
 
         return {
-            pagination: {
-                page: currentPage,
-                length: list.length,
-                next: total > currentPage * limit ? currentPage + 1 : null,
-                prev: currentPage > 1 ? currentPage - 1 : null,
-            }
+
+            page: currentPage,
+            length: list.length,
+            next: total > currentPage * limit ? currentPage + 1 : null,
+            prev: currentPage > 1 ? currentPage - 1 : null,
+
 
         }
     }
+}
+
+export class PaginationParamsDTO {
+    @IsOptional()
+    @IsNumber()
+    page?: number;
+
+    @IsOptional()
+    @IsNumber()
+    limit?: number;
 }

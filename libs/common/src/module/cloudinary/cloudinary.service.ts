@@ -19,6 +19,9 @@ export class CloudinaryService {
                 path,
                 {
                     folder: "DocDoc",
+                    use_filename: true,
+                    unique_filename: false,
+
                 }
             )
             .catch((error) => {
@@ -27,6 +30,14 @@ export class CloudinaryService {
 
         return result;
 
+    }
+
+    uploadMultiple = async (files?: Express.Multer.File[]) => {
+        const promises = files?.map(async (file) => {
+            return await this.uploadImage(file.path);
+        });
+
+        return await Promise.all(promises);
     }
 
 }
