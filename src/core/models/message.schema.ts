@@ -14,13 +14,9 @@ export class Message extends AbstractSchema {
     conversation: Types.ObjectId
 
     @Prop({ type: Types.ObjectId, ref: User.name })
-    sender: {
-        id: Types.ObjectId,
-        name: string,
-        pic: string
-    }
+    sender: Types.ObjectId
 
-    @Prop({ default: false })
-    isSeen: boolean;
+    @Prop({ type: Types.ObjectId, ref: Message.name })
+    lastMessage: Types.ObjectId
 
 }

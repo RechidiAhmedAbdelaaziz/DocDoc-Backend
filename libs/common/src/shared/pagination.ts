@@ -1,10 +1,11 @@
-import { IsNumber, IsOptional } from "class-validator";
+import { Logger } from "@nestjs/common";
+import { IsNumber, IsNumberString, IsOptional } from "class-validator";
 import { FilterQuery, Model } from "mongoose";
 
 export class Pagination<T> {
     constructor(
         private readonly model: Model<T>,
-        private readonly options: {
+        private readonly options?: {
             page?: number;
             limit?: number;
             filter?: FilterQuery<T>
@@ -13,16 +14,20 @@ export class Pagination<T> {
     ) { }
 
     getOptions() {
+
+        const page = this.options.page || 1;
+        const limit = this.options.limit || 10;
         return {
-            page: this.options.page || 1,
-            limit: this.options.limit || 10,
-            generate: this.generate
+            page,
+            limit,
+            generate: (list: any[]) => this.generate(list, { page, limit })
         }
 
     }
 
-    private async generate(list: any[]) {
-        const { page, limit } = this.options;
+    private async generate(list: any[], options: { page: number, limit: number }) {
+
+        const { page, limit } = options;
 
 
         const total = await this.model.countDocuments(this.options.filter);
@@ -31,10 +36,10 @@ export class Pagination<T> {
 
         return {
 
-            page: currentPage,
+            page: currentPage || 0,
             length: list.length,
-            next: total > currentPage * limit ? currentPage + 1 : null,
-            prev: currentPage > 1 ? currentPage - 1 : null,
+            next: total > currentPage * limit ? currentPage + 1 : undefined,
+            prev: currentPage > 1 ? currentPage - 1 : undefined,
 
 
         }
@@ -43,10 +48,10 @@ export class Pagination<T> {
 
 export class PaginationParamsDTO {
     @IsOptional()
-    @IsNumber()
+    @IsNumberString()
     page?: number;
 
     @IsOptional()
-    @IsNumber()
+    @IsNumberString()
     limit?: number;
 }
